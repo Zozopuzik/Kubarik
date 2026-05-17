@@ -1,4 +1,16 @@
 title: Kubariki
-description: Block-Blast-style puzzle game for iOS — legal documents
-theme: jekyll-theme-cayman
+description: Cozy block-puzzle game for iOS
+baseurl: "/Kubarik"
 permalink: pretty
+
+# No theme — we ship our own HTML/CSS via the default layout.
+
+# Tell Jekyll to keep the favicon SVG and other asset paths intact
+include:
+  - assets
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

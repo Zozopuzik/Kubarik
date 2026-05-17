@@ -7,7 +7,7 @@
 //  at its real footprint while choosing where to drop it.
 //
 //  The piece is "lifted" above the finger by `liftY` points so the user's
-//  hand doesn't cover the piece — standard Block Blast convention.
+//  hand doesn't cover the piece — standard block-puzzle convention.
 //
 
 import SwiftUI

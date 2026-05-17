@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }} · Kubariki</title>
+<meta name="description" content="{{ page.title }} for Kubariki — cozy block-puzzle game for iOS.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23FF8B6B'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='system-ui' font-weight='900' font-size='36' fill='white'%3EK%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/Kubarik/assets/style.css">
+</head>
+<body>
+
+<div class="bg-cubes" aria-hidden="true">
+  <span class="tile turquoise"></span>
+  <span class="tile coral"></span>
+  <span class="tile amber"></span>
+  <span class="tile lavender"></span>
+  <span class="tile mint"></span>
+  <span class="tile pink"></span>
+</div>
+
+<div class="shell">
+
+  <nav class="topnav">
+    <a class="brand" href="/Kubarik/">KUBARIKI</a>
+    <div class="links">
+      <a href="https://github.com/Zozopuzik/Kubarik">GitHub</a>
+      <a href="/Kubarik/privacy/">Privacy</a>
+      <a href="/Kubarik/terms/">Terms</a>
+    </div>
+  </nav>
+
+  <article class="legal">
+    {{ content }}
+  </article>
+
+  <footer class="foot">
+    <p>Built by <a href="https://github.com/Zozopuzik">Yevhen Sabadash</a></p>
+    <div class="links">
+      <a href="https://github.com/Zozopuzik/Kubarik">Source</a>
+      <a href="/Kubarik/privacy/">Privacy</a>
+      <a href="/Kubarik/terms/">Terms</a>
+      <a href="https://github.com/Zozopuzik/Kubarik/issues/new">Report a bug</a>
+    </div>
+    <p class="copyright">© 2026 Yevhen Sabadash</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

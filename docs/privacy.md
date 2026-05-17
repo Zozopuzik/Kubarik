@@ -5,7 +5,7 @@ title: Privacy Policy
 
 # Privacy Policy
 
-_Last updated: May 2026_
+<span class="updated">Last updated · May 2026</span>
 
 Kubariki ("the App") is built and operated by **Yevhen Sabadash**. This policy explains what the App collects, why, and how to remove it.
 
@@ -58,7 +58,3 @@ If we materially change what we collect, we'll update the version date and surfa
 ## Contact
 
 <evgen.sabadash1337@gmail.com>
-
----
-
-[← Back to Kubariki](.) · [Terms of Use](../terms)

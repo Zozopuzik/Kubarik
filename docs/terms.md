@@ -5,7 +5,7 @@ title: Terms of Use
 
 # Terms of Use
 
-_Last updated: May 2026_
+<span class="updated">Last updated · May 2026</span>
 
 By tapping **Play**, signing in, or otherwise using **Kubariki** ("the App"), you agree to these terms.
 
@@ -38,7 +38,3 @@ These terms are governed by the laws of **Ukraine**. If a clause is unenforceabl
 ## Questions or complaints
 
 <evgen.sabadash1337@gmail.com>
-
----
-
-[← Back to Kubariki](.) · [Privacy Policy](../privacy)

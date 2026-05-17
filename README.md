@@ -1,6 +1,6 @@
 # Kubariki
 
-A Block-Blast-style puzzle game built **from scratch in SwiftUI in a single day**, learning Swift along the way. Drag pieces from a tray onto a 7×7 grid, clear full rows and columns, chase combos.
+A cozy block-puzzle game built **from scratch in SwiftUI in a single day**, learning Swift along the way. Drag pieces from a tray onto a 7×7 grid, clear full rows and columns, chase combos.
 
 [![iOS](https://img.shields.io/badge/iOS-17%2B-black?logo=apple)](https://www.apple.com/ios/)
 [![Swift](https://img.shields.io/badge/Swift-5.9-orange?logo=swift)](https://www.swift.org)
