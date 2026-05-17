@@ -53,6 +53,12 @@ protocol AuthBackend: AnyObject {
     /// Drops the session and clears any cached identity.
     func signOut() async throws
 
+    /// Deletes the signed-in user's profile, game history, and auth record.
+    /// Hard requirement for App Store review when the app offers account
+    /// creation. Implemented server-side so the caller doesn't need
+    /// service_role permissions.
+    func deleteAccount(userId: UUID) async throws
+
     // MARK: - Game history
 
     /// Persists a finished game session. The lifetime "total points"

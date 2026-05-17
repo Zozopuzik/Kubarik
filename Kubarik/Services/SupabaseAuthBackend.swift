@@ -83,6 +83,19 @@ final class SupabaseAuthBackend: AuthBackend {
         try await client.auth.signOut()
     }
 
+    func deleteAccount(userId: UUID) async throws {
+        // The RPC `delete_my_account` runs as SECURITY DEFINER on the
+        // server and deletes the caller's games + profile + auth.users
+        // row in one transaction. RLS verifies auth.uid() inside the
+        // function, so we don't pass the user id.
+        try await client
+            .rpc("delete_my_account")
+            .execute()
+        // Local session is now invalid; drop it so the cached refresh
+        // token doesn't try to revive a deleted user.
+        try? await client.auth.signOut()
+    }
+
     // MARK: - Profiles
 
     func fetchProfile(userId: UUID) async throws -> UserProfile? {

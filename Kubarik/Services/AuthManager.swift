@@ -155,6 +155,17 @@ final class AuthManager {
     func signOut() async {
         try? await backend.signOut()
         state = .guest
+        totalScore = 0
+    }
+
+    /// Permanently deletes the signed-in user — auth row, profile, every
+    /// game record. Returns the user to guest state on success. Required
+    /// by App Store Review guideline 5.1.1(v).
+    func deleteAccount() async throws {
+        guard case .signedIn(let profile) = state else { return }
+        try await backend.deleteAccount(userId: profile.id)
+        state = .guest
+        totalScore = 0
     }
 
     // MARK: - Internals

@@ -14,6 +14,9 @@ struct ProfileView: View {
     @Environment(PreferencesStore.self) private var prefs
     @State private var tab: ProfileTab = .info
     @State private var showRenameSheet = false
+    @State private var showDeleteConfirm = false
+    @State private var isDeleting = false
+    @State private var deleteError: String?
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -48,6 +51,33 @@ struct ProfileView: View {
                     try await auth.updateDisplayName(newName)
                 }
             )
+        }
+        .alert("Delete account?", isPresented: $showDeleteConfirm) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                performDelete()
+            }
+        } message: {
+            Text("This permanently removes your profile, every game you've played, and your sign-in. We can't undo it.")
+        }
+        .alert("Couldn't delete", isPresented: Binding(get: { deleteError != nil }, set: { if !$0 { deleteError = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(deleteError ?? "")
+        }
+    }
+
+    private func performDelete() {
+        isDeleting = true
+        Task {
+            do {
+                try await auth.deleteAccount()
+                isDeleting = false
+                dismiss()
+            } catch {
+                isDeleting = false
+                deleteError = error.localizedDescription
+            }
         }
     }
 
@@ -166,20 +196,39 @@ struct ProfileView: View {
             Spacer()
 
             if profile != nil {
-                Button(action: {
-                    Task {
-                        await auth.signOut()
-                        dismiss()
+                VStack(spacing: 6) {
+                    Button(action: {
+                        Task {
+                            await auth.signOut()
+                            dismiss()
+                        }
+                    }) {
+                        Text("SIGN OUT")
+                            .font(.system(size: 13, weight: .heavy, design: .rounded))
+                            .tracking(2.4)
+                            .foregroundStyle(Palette.textBrown.opacity(0.65))
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 28)
                     }
-                }) {
-                    Text("SIGN OUT")
-                        .font(.system(size: 13, weight: .heavy, design: .rounded))
-                        .tracking(2.4)
-                        .foregroundStyle(Palette.textBrown.opacity(0.65))
-                        .padding(.vertical, 12)
-                        .padding(.horizontal, 28)
+
+                    Button(action: { showDeleteConfirm = true }) {
+                        HStack(spacing: 6) {
+                            if isDeleting {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .scaleEffect(0.75)
+                            }
+                            Text(isDeleting ? "DELETING…" : "DELETE ACCOUNT")
+                                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                                .tracking(2.2)
+                                .foregroundStyle(Color(hex: 0xB23A2E).opacity(0.85))
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 24)
+                    }
+                    .disabled(isDeleting)
                 }
-                .padding(.bottom, 22)
+                .padding(.bottom, 18)
             }
         }
     }

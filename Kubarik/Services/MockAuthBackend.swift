@@ -115,6 +115,17 @@ final class MockAuthBackend: AuthBackend {
         defaults.removeObject(forKey: sessionKey)
     }
 
+    func deleteAccount(userId: UUID) async throws {
+        var profiles = loadProfiles()
+        profiles.removeValue(forKey: userId)
+        saveProfiles(profiles)
+
+        let remainingGames = loadGames().filter { $0.userId != userId }
+        saveGames(remainingGames)
+
+        defaults.removeObject(forKey: sessionKey)
+    }
+
     // MARK: - Games
 
     private let gamesKey = "kubarik.mock.games"

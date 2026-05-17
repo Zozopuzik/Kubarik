@@ -20,6 +20,7 @@ struct WelcomeView: View {
     @Environment(AudioPlayer.self) private var audio
     @State private var animated = false
     @State private var showSignIn = false
+    @State private var legalSheet: LegalDoc?
 
     // Timing knobs (seconds). One central place so the sequence is easy to retune.
     private let cubeStart: Double      = 0
@@ -47,6 +48,9 @@ struct WelcomeView: View {
         }
         .sheet(isPresented: $showSignIn) {
             EmailSignInSheet()
+        }
+        .sheet(item: $legalSheet) { doc in
+            LegalDocView(doc: doc)
         }
     }
 
@@ -108,9 +112,45 @@ struct WelcomeView: View {
                     value: animated
                 )
 
-            Spacer().frame(height: 30)
+            Spacer().frame(height: 12)
+
+            legalLinks
+                .opacity(animated ? 1 : 0)
+                .animation(
+                    .easeOut(duration: ctaDuration).delay(ctaStart + 0.22),
+                    value: animated
+                )
+
+            Spacer().frame(height: 18)
         }
         .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Legal links
+
+    private var legalLinks: some View {
+        HStack(spacing: 14) {
+            legalLink("Terms of Use", doc: .terms)
+
+            Text("·")
+                .font(.system(size: 11, weight: .heavy, design: .rounded))
+                .foregroundStyle(Palette.taglineBrown.opacity(0.5))
+
+            legalLink("Privacy Policy", doc: .privacy)
+        }
+    }
+
+    private func legalLink(_ label: String, doc: LegalDoc) -> some View {
+        Button { legalSheet = doc } label: {
+            Text(label)
+                .font(.system(size: 11, weight: .heavy, design: .rounded))
+                .tracking(1.3)
+                .textCase(.uppercase)
+                .foregroundStyle(Palette.taglineBrown.opacity(0.65))
+                .padding(.vertical, 6)
+                .padding(.horizontal, 4)
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Logo letters

@@ -231,6 +231,30 @@ create or replace function public.get_user_total_score(p_user_id uuid)
 returns int language sql stable as $$
   select coalesce(sum(score), 0)::int from public.games where user_id = p_user_id;
 $$;
+
+-- Account deletion. Runs as the function owner (postgres) so it can
+-- reach into auth.users; rls is enforced via auth.uid() inside the body.
+-- Required for App Store Review guideline 5.1.1(v).
+create or replace function public.delete_my_account()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  uid uuid := auth.uid();
+begin
+  if uid is null then
+    raise exception 'Not authenticated';
+  end if;
+  delete from public.games    where user_id = uid;
+  delete from public.profiles where id      = uid;
+  delete from auth.users      where id      = uid;
+end;
+$$;
+
+revoke all on function public.delete_my_account() from public, anon;
+grant execute on function public.delete_my_account() to authenticated;
 ```
 
 ---
