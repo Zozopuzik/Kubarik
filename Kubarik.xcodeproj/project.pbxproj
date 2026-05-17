@@ -6,13 +6,35 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		18FFF1DF2FB91AAC004CDA09 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 18FFF1DE2FB91AAC004CDA09 /* Auth */; };
+		18FFF1E12FB91AAC004CDA09 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 18FFF1E02FB91AAC004CDA09 /* Functions */; };
+		18FFF1E32FB91AAC004CDA09 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 18FFF1E22FB91AAC004CDA09 /* PostgREST */; };
+		18FFF1E52FB91AAC004CDA09 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 18FFF1E42FB91AAC004CDA09 /* Realtime */; };
+		18FFF1E72FB91AAC004CDA09 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 18FFF1E62FB91AAC004CDA09 /* Storage */; };
+		18FFF1F02FB996D2004CDA09 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 18FFF1EF2FB996D2004CDA09 /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		18FB3D302FB8F44600C476EF /* Kubarik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kubarik.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		18FFF1ED2FB91C69004CDA09 /* Exceptions for "Kubarik" folder in "Kubarik" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 18FB3D2F2FB8F44600C476EF /* Kubarik */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		18FB3D322FB8F44600C476EF /* Kubarik */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				18FFF1ED2FB91C69004CDA09 /* Exceptions for "Kubarik" folder in "Kubarik" target */,
+			);
 			path = Kubarik;
 			sourceTree = "<group>";
 		};
@@ -23,6 +45,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18FFF1E32FB91AAC004CDA09 /* PostgREST in Frameworks */,
+				18FFF1E12FB91AAC004CDA09 /* Functions in Frameworks */,
+				18FFF1F02FB996D2004CDA09 /* Supabase in Frameworks */,
+				18FFF1DF2FB91AAC004CDA09 /* Auth in Frameworks */,
+				18FFF1E72FB91AAC004CDA09 /* Storage in Frameworks */,
+				18FFF1E52FB91AAC004CDA09 /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				18FB3D322FB8F44600C476EF /* Kubarik */,
+				18FFF1EE2FB91D81004CDA09 /* Frameworks */,
 				18FB3D312FB8F44600C476EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +72,13 @@
 				18FB3D302FB8F44600C476EF /* Kubarik.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		18FFF1EE2FB91D81004CDA09 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -65,6 +101,12 @@
 			);
 			name = Kubarik;
 			packageProductDependencies = (
+				18FFF1DE2FB91AAC004CDA09 /* Auth */,
+				18FFF1E02FB91AAC004CDA09 /* Functions */,
+				18FFF1E22FB91AAC004CDA09 /* PostgREST */,
+				18FFF1E42FB91AAC004CDA09 /* Realtime */,
+				18FFF1E62FB91AAC004CDA09 /* Storage */,
+				18FFF1EF2FB996D2004CDA09 /* Supabase */,
 			);
 			productName = Kubarik;
 			productReference = 18FB3D302FB8F44600C476EF /* Kubarik.app */;
@@ -94,6 +136,9 @@
 			);
 			mainGroup = 18FB3D272FB8F44600C476EF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18FB3D312FB8F44600C476EF /* Products */;
 			projectDirPath = "";
@@ -256,11 +301,12 @@
 				DEVELOPMENT_TEAM = UK9P83M9LW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kubarik/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Kubariki;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -288,11 +334,12 @@
 				DEVELOPMENT_TEAM = UK9P83M9LW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kubarik/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Kubariki;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -332,6 +379,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		18FFF1DE2FB91AAC004CDA09 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		18FFF1E02FB91AAC004CDA09 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		18FFF1E22FB91AAC004CDA09 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		18FFF1E42FB91AAC004CDA09 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		18FFF1E62FB91AAC004CDA09 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		18FFF1EF2FB996D2004CDA09 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18FFF1DD2FB91AAC004CDA09 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 18FB3D282FB8F44600C476EF /* Project object */;
 }
