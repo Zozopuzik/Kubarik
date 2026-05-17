@@ -63,6 +63,42 @@ struct PrefRow<Control: View>: View {
     }
 }
 
+/// Tappable row that opens an external destination. Use for "report a bug",
+/// "view on GitHub", or anything else that kicks out of the app. The chevron
+/// hints at the external nature without spelling it out.
+struct PrefLinkRow: View {
+    let label: String
+    var systemImage: String? = nil
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                if let systemImage {
+                    Image(systemName: systemImage)
+                        .font(.system(size: 16, weight: .heavy))
+                        .foregroundStyle(Palette.textBrown.opacity(0.85))
+                        .frame(width: 22)
+                }
+
+                Text(label)
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(Palette.textBrown)
+
+                Spacer()
+
+                Image(systemName: "arrow.up.right")
+                    .font(.system(size: 13, weight: .heavy))
+                    .foregroundStyle(Palette.taglineBrown.opacity(0.75))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 struct ToggleSwitch: View {
     @Binding var isOn: Bool
 

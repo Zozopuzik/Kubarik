@@ -11,7 +11,10 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @Environment(PreferencesStore.self) private var prefs
+
+    private let issuesURL = URL(string: "https://github.com/Zozopuzik/Kubarik/issues/new")!
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -35,6 +38,19 @@ struct SettingsView: View {
                                 ))
                             }
                         }
+
+                        PrefSection(label: "Help us") {
+                            PrefLinkRow(
+                                label: "Report a bug or idea",
+                                systemImage: "exclamationmark.bubble.fill",
+                                action: { openURL(issuesURL) }
+                            )
+                        }
+
+                        Text("Opens GitHub Issues in Safari. No account needed to read — sign in there if you want to post.")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(Palette.taglineBrown.opacity(0.75))
+                            .padding(.horizontal, 8)
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 32)
