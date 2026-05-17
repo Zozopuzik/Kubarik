@@ -10,8 +10,11 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @Environment(AuthManager.self) private var auth
     @Environment(PreferencesStore.self) private var prefs
+
+    private let issuesURL = URL(string: "https://github.com/Zozopuzik/Kubarik/issues/new")!
     @State private var tab: ProfileTab = .info
     @State private var showRenameSheet = false
     @State private var showDeleteConfirm = false
@@ -278,6 +281,19 @@ struct ProfileView: View {
                         ))
                     }
                 }
+
+                PrefSection(label: "Help us") {
+                    PrefLinkRow(
+                        label: "Report a bug or idea",
+                        systemImage: "exclamationmark.bubble.fill",
+                        action: { openURL(issuesURL) }
+                    )
+                }
+
+                Text("Opens GitHub Issues in Safari. No account needed to read — sign in there if you want to post.")
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(Palette.taglineBrown.opacity(0.75))
+                    .padding(.horizontal, 8)
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 32)
