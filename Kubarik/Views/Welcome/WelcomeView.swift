@@ -19,8 +19,8 @@ struct WelcomeView: View {
     @Environment(AuthManager.self) private var auth
     @Environment(AudioPlayer.self) private var audio
     @State private var animated = false
-    @State private var showSignIn = false
     @State private var legalSheet: LegalDoc?
+    @State private var appleError: String?
 
     // Timing knobs (seconds). One central place so the sequence is easy to retune.
     private let cubeStart: Double      = 0
@@ -45,9 +45,6 @@ struct WelcomeView: View {
         .onAppear {
             animated = true
             audio.playBackgroundLoop("Pineapple Pause")
-        }
-        .sheet(isPresented: $showSignIn) {
-            EmailSignInSheet()
         }
         .sheet(item: $legalSheet) { doc in
             LegalDocView(doc: doc)
@@ -263,25 +260,34 @@ struct WelcomeView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(Palette.taglineBrown.opacity(0.85))
 
-            Button {
-                showSignIn = true
-            } label: {
-                HStack(spacing: 10) {
-                    Image(systemName: "envelope.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text("Sign in with email")
-                        .font(.system(size: 15, weight: .heavy, design: .rounded))
-                        .tracking(0.5)
-                }
-                .foregroundStyle(.white)
-                .padding(.vertical, 14)
-                .padding(.horizontal, 26)
-                .frame(width: 232)
-                .background(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(Color(hex: 0x3A2A1E))
+            AppleSignInButton(
+                onSuccess: handleAppleSignIn,
+                onFailure: { error in appleError = error.localizedDescription }
+            )
+            .frame(width: 232)
+
+            if let appleError {
+                Text(appleError)
+                    .font(.system(size: 11, weight: .heavy, design: .rounded))
+                    .tracking(0.2)
+                    .foregroundStyle(Color(hex: 0xB23A2E).opacity(0.85))
+                    .frame(maxWidth: 240)
+                    .multilineTextAlignment(.center)
+            }
+        }
+    }
+
+    private func handleAppleSignIn(idToken: String, nonce: String, suggestedName: String?) {
+        appleError = nil
+        Task {
+            do {
+                try await auth.completeAppleSignIn(
+                    idToken: idToken,
+                    nonce: nonce,
+                    suggestedName: suggestedName
                 )
-                .shadow(color: .black.opacity(0.20), radius: 14, x: 0, y: 8)
+            } catch {
+                appleError = error.localizedDescription
             }
         }
     }

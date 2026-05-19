@@ -27,7 +27,7 @@ struct AppleSignInButton: View {
             onRequest: { request in
                 let nonce = Self.randomNonce()
                 currentNonce = nonce
-                request.requestedScopes = [.fullName]
+                request.requestedScopes = [.fullName, .email]
                 request.nonce = Self.sha256(nonce)
             },
             onCompletion: { result in
