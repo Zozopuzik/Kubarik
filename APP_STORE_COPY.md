@@ -161,7 +161,7 @@ Apple's privacy questionnaire. Answers:
 
 ## App Review Information
 
-For Apple's reviewer team. Sign-in is optional in Kubariki — reviewer can play without an account — so this is mostly a courtesy.
+For Apple's reviewer team. Kubariki uses **Sign in with Apple as the only sign-in method**, so no demo username/password is needed — the reviewer signs in with their own Apple ID.
 
 ```
 First Name: Yevhen
@@ -169,18 +169,13 @@ Last Name: Sabadash
 Phone: +380 96 832 3305
 Email: evgen.sabadash1337@gmail.com
 
-Demo Account Username:  reviewer@kubariki.app
-Demo Account Password:  Kubariki-Review-2026!
-
 Notes for Reviewer:
 - Sign-in is OPTIONAL. The full game is playable as a guest — just tap PLAY on the welcome screen.
-- Email + password auth uses Supabase. Demo account above is pre-seeded for review.
-- Account deletion: Profile → Preferences → (visible only when signed in) — DELETE ACCOUNT button. Wipes auth.users + profile + every game row in one transaction.
-- No IAP, no subscriptions, no ads, no third-party analytics.
+- The only sign-in method is Sign in with Apple (native, via AuthenticationServices). No demo account needed — please use any Apple ID to test signed-in features (Profile, Leaderboard, score sync).
+- Account deletion: Profile → Info tab → DELETE ACCOUNT button. Wipes auth.users + profile + every game row in one transaction via a SECURITY DEFINER Postgres function. Required by App Store Review guideline 5.1.1(v).
+- No IAP, no subscriptions, no ads, no third-party analytics or tracking SDKs.
 - Source code public at github.com/Zozopuzik/Kubarik
 ```
-
-> ⚠️ You need to actually create that demo account in Supabase before submitting. Use a fresh email you control. Document the password somewhere safe (1Password / Apple Keychain).
 
 ---
 
@@ -229,16 +224,16 @@ You only NEED 6.9" — Apple auto-scales for smaller phones. But you can add 6.7
 
 ## Pre-submission checklist
 
-- [ ] Apple Developer Program enrollment approved
-- [ ] Bundle ID `com.sds.Kubarik` registered in Identifiers
-- [ ] App ID created in App Store Connect
-- [ ] Demo account created in Supabase, password stored
-- [ ] GitHub Pages enabled and `https://zozopuzik.github.io/Kubarik/privacy/` returns 200
+- [x] Apple Developer Program enrollment approved
+- [x] Bundle ID `com.sds.Kubarik` registered with Sign In with Apple capability
+- [x] Sign in with Apple wired end-to-end + Supabase Apple provider configured
+- [x] GitHub Pages live: `https://zozopuzik.github.io/Kubarik/privacy/` returns 200
+- [ ] App listing created in App Store Connect
 - [ ] Screenshots taken at 1320 × 2868 (min 3)
 - [ ] Build archived in Xcode and uploaded via Organizer
 - [ ] All metadata above filled in App Store Connect
 - [ ] Age Rating questionnaire submitted
-- [ ] Privacy questionnaire submitted
+- [ ] App Privacy ("Nutrition Label") submitted
 - [ ] App Review Information filled
 - [ ] Submit for Review
 - [ ] Pray to the review gods 🙏
