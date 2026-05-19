@@ -2,7 +2,7 @@
 //  WelcomeView.swift
 //  Kubarik
 //
-//  The first screen the user sees. Letter-tile logo (KUBARIKI), tagline,
+//  The first screen the user sees. Letter-tile logo (CUBARIKI), tagline,
 //  Play CTA, and a row of utility icons. On appear, an entrance
 //  choreography plays: cubes fly in from edges, letters drop one by one
 //  with a small overshoot, then the tagline and CTA fade in.

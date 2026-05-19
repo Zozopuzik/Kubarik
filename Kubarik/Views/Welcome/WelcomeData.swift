@@ -41,7 +41,7 @@ struct WelcomeCube: Identifiable {
 
 enum WelcomeData {
     static let letters: [WelcomeLetter] = [
-        .init(character: "K", color: .coral,      rotation: -4),
+        .init(character: "C", color: .coral,      rotation: -4),
         .init(character: "U", color: .amber,      rotation:  2),
         .init(character: "B", color: .turquoise,  rotation: -2),
         .init(character: "A", color: .lavender,   rotation:  3),

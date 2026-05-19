@@ -1,4 +1,4 @@
-# Kubariki
+# Cubariki
 
 A cozy block-puzzle game built **from scratch in SwiftUI in a single day**, learning Swift along the way. Drag pieces from a tray onto a 7×7 grid, clear full rows and columns, chase combos.
 

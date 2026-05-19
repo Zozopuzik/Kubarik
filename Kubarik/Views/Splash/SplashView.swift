@@ -18,7 +18,7 @@ struct SplashView: View {
     @State private var taglineIn = false
 
     private let cubes: [(color: TileColor, letter: String, offsetX: CGFloat, top: CGFloat, rotation: Double)] = [
-        (.amber, "K",  18, 230, -6),
+        (.amber, "C",  18, 230, -6),
         (.coral, "U", -16, 330,  4),
         (.mint,  "B",   8, 430, -2),
     ]
@@ -43,7 +43,7 @@ struct SplashView: View {
                             .offset(y: cubesIn[index] ? 0 : -580)
                     }
 
-                    Text("KUBARIKI")
+                    Text("CUBARIKI")
                         .font(.system(size: 32, weight: .heavy, design: .rounded))
                         .tracking(6)
                         .foregroundStyle(Palette.textBrown)

@@ -1,6 +1,6 @@
 # App Store Connect — Submission Copy
 
-Ready-to-paste text for the Kubariki App Store listing. Counts are checked against Apple's limits. Update anything that doesn't sound right, then copy into [appstoreconnect.apple.com](https://appstoreconnect.apple.com).
+Ready-to-paste text for the Cubariki App Store listing. Counts are checked against Apple's limits. Update anything that doesn't sound right, then copy into [appstoreconnect.apple.com](https://appstoreconnect.apple.com).
 
 ---
 
@@ -8,14 +8,14 @@ Ready-to-paste text for the Kubariki App Store listing. Counts are checked again
 
 | Field | Value | Limit |
 |---|---|---|
-| **App Name** | `Kubariki` | 30 chars |
+| **App Name** | `Cubariki` | 30 chars |
 | **Subtitle** | `Drop · Pop · Chill` | 30 chars |
 | **Bundle ID** | `com.sds.Kubarik` | — |
 | **SKU** | `kubariki-ios-001` | — |
 | **Primary language** | English (U.S.) | — |
 | **Copyright** | `© 2026 Yevhen Sabadash` | — |
 
-> ⚠️ Check `Kubariki` is not already taken on the App Store before you start the listing — search [apps.apple.com](https://apps.apple.com) first. Fallback names: `Kubariki: Block Puzzle`, `Kubarik Blocks`, `Kubarik`.
+> ⚠️ Check `Cubariki` is not already taken on the App Store before you start the listing — search [apps.apple.com](https://apps.apple.com) first. Fallback names: `Cubariki: Block Puzzle`, `Kubarik Blocks`, `Kubarik`.
 
 ---
 
@@ -36,7 +36,7 @@ _(149 chars — room to spare)_
 ```
 Drop pieces onto a 7×7 grid. Snap blocks into rows and columns. Chain combos until the board explodes with particles and screen shake.
 
-Kubariki is a cozy take on the block-puzzle genre — built for one-handed play and quick chill sessions.
+Cubariki is a cozy take on the block-puzzle genre — built for one-handed play and quick chill sessions.
 
 FEATURES
 
@@ -54,7 +54,7 @@ FEATURES
 
 BUILT TO LEARN
 
-Kubariki is the first iOS game by Yevhen Sabadash (5 years on React Native). Built solo, end-to-end, in a single weekend to dive into Swift and SwiftUI. The code is open — github.com/Zozopuzik/Kubarik
+Cubariki is the first iOS game by Yevhen Sabadash (5 years on React Native). Built solo, end-to-end, in a single weekend to dive into Swift and SwiftUI. The code is open — github.com/Zozopuzik/Kubarik
 
 PRIVACY
 
@@ -161,7 +161,7 @@ Apple's privacy questionnaire. Answers:
 
 ## App Review Information
 
-For Apple's reviewer team. Kubariki uses **Sign in with Apple as the only sign-in method**, so no demo username/password is needed — the reviewer signs in with their own Apple ID.
+For Apple's reviewer team. Cubariki uses **Sign in with Apple as the only sign-in method**, so no demo username/password is needed — the reviewer signs in with their own Apple ID.
 
 ```
 First Name: Yevhen
@@ -199,7 +199,7 @@ Notes for Reviewer:
 
 Suggested set (5 shots):
 
-1. **Welcome screen** with the K/U/B/A/R/I/K/I letter tiles + PLAY pulsing
+1. **Welcome screen** with the C/U/B/A/R/I/K/I letter tiles + PLAY pulsing
 2. **Active gameplay** — board half-filled, drag in progress, will-clear preview glowing
 3. **Combo moment** — particles erupting from cleared row, "WOW" praise flash visible, +500 popup floating
 4. **Game over sheet** — score, best, total games stats
@@ -210,7 +210,7 @@ Optional 6th: **Profile** with stats grid (BEST / TOTAL / GAMES / LINES).
 **How to capture:**
 ```
 1. In Xcode: open Window → Devices and Simulators → start iPhone 16 Pro Max sim
-2. Run Kubariki on it (Cmd+R while sim selected)
+2. Run Cubariki on it (Cmd+R while sim selected)
 3. In Simulator: File → Screenshot (Cmd+S) — saves to Desktop at native resolution
 4. Drop into Figma / Sketch with marketing copy overlays if desired
 5. Final dimensions must be exactly 1320 × 2868 for 6.9"

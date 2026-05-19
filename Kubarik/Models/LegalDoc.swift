@@ -36,7 +36,7 @@ enum LegalDoc: String, Identifiable {
     // over to AttributedString and parse markdown.
 
     private static let termsBody = """
-By tapping Play, signing in, or otherwise using Kubariki ("the App"), you agree to these terms.
+By tapping Play, signing in, or otherwise using Cubariki ("the App"), you agree to these terms.
 
 1. The App is provided as-is, free of charge, for personal entertainment. We make no guarantees about uptime, scores being preserved, or the leaderboard reflecting any particular reality.
 
@@ -57,7 +57,7 @@ Questions or complaints: evgen.sabadash1337@gmail.com
 """
 
     private static let privacyBody = """
-Kubariki ("the App") is built and operated by Yevhen Sabadash. This policy explains what the App collects, why, and how to remove it.
+Cubariki ("the App") is built and operated by Yevhen Sabadash. This policy explains what the App collects, why, and how to remove it.
 
 WHAT WE COLLECT
 

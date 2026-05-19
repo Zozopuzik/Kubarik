@@ -7,7 +7,7 @@ title: Privacy Policy
 
 <span class="updated">Last updated · May 2026</span>
 
-Kubariki ("the App") is built and operated by **Yevhen Sabadash**. This policy explains what the App collects, why, and how to remove it.
+Cubariki ("the App") is built and operated by **Yevhen Sabadash**. This policy explains what the App collects, why, and how to remove it.
 
 ## What we collect
 

@@ -34,10 +34,11 @@ struct LeaderboardView: View {
                 } else if profiles.isEmpty {
                     emptyState
                 } else {
-                    Spacer().frame(height: 22)
+                    Spacer().frame(height: 4)
                     podium
-                    Spacer().frame(height: 18)
+                    Spacer().frame(height: 6)
                     restList
+                    Spacer(minLength: 0)
                 }
             }
         }
@@ -108,24 +109,42 @@ struct LeaderboardView: View {
         .frame(height: 230)
     }
 
-    // MARK: - Scrollable rest (ranks 4+)
+    // MARK: - Static list (ranks 4..10 + optional "you" row)
 
     private var restList: some View {
-        let rest = Array(profiles.enumerated()).dropFirst(3)
+        // Always render ranks 4..10 (or however many we have past the podium,
+        // up to 7 entries). After that, if the signed-in user is beyond rank
+        // 10 we show a "···" separator and their row pinned at the bottom.
+        let visible = Array(profiles.enumerated())
+            .dropFirst(3)
+            .prefix(4)
 
-        return ScrollView {
-            VStack(spacing: 4) {
-                ForEach(Array(rest), id: \.element.id) { index, profile in
-                    LeaderboardRow(
-                        rank: index + 1,
-                        profile: profile,
-                        isMe: profile.id == meID
-                    )
-                }
+        let userIndex = profiles.firstIndex { $0.id == meID }
+        let userBeyondVisible: (Int, UserProfile)? = {
+            guard let idx = userIndex, idx >= 7 else { return nil }
+            return (idx, profiles[idx])
+        }()
+
+        return VStack(spacing: 4) {
+            ForEach(Array(visible), id: \.element.id) { index, profile in
+                LeaderboardRow(
+                    rank: index + 1,
+                    profile: profile,
+                    isMe: profile.id == meID
+                )
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
+
+            if let (idx, profile) = userBeyondVisible {
+                ellipsisDivider
+                LeaderboardRow(
+                    rank: idx + 1,
+                    profile: profile,
+                    isMe: true
+                )
+            }
         }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 10)
         .background(
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(Color.white.opacity(0.32))
@@ -135,7 +154,18 @@ struct LeaderboardView: View {
                 )
         )
         .padding(.horizontal, 16)
-        .padding(.bottom, 24)
+    }
+
+    private var ellipsisDivider: some View {
+        HStack(spacing: 6) {
+            ForEach(0..<3) { _ in
+                Circle()
+                    .fill(Palette.taglineBrown.opacity(0.55))
+                    .frame(width: 6, height: 6)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 10)
     }
 
     // MARK: - Loading
@@ -166,17 +196,7 @@ private struct PodiumColumn: View {
         }
     }
 
-    private var trimEdge: Color {
-        switch place {
-        case 1: return Color(hex: 0xCC9637)
-        case 2: return Color(hex: 0x9A9AA3)
-        default: return Color(hex: 0xA56145)
-        }
-    }
-
-    private var avatarSize: CGFloat {
-        place == 1 ? 64 : 52
-    }
+    private var avatarSize: CGFloat { 56 }
 
     private var blockHeight: CGFloat {
         switch place {
@@ -207,13 +227,15 @@ private struct PodiumColumn: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .padding(.horizontal, 4)
+                .padding(.top, 6)
 
             Text("\(profile.bestScore)")
                 .font(.system(size: 18, weight: .heavy, design: .rounded))
                 .foregroundStyle(Palette.textBrown)
                 .monospacedDigit()
+                .padding(.bottom, 10)
 
-            // Podium block
+            // Podium block — flat, no shadows / no 3-D edge
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(trimColor)
                 .frame(height: blockHeight)
@@ -221,16 +243,9 @@ private struct PodiumColumn: View {
                     Text("\(place)")
                         .font(.system(size: 22, weight: .heavy, design: .rounded))
                         .foregroundStyle(.white)
-                        .shadow(color: trimEdge, radius: 0, x: 0, y: 2)
                         .padding(.top, 6),
                     alignment: .top
                 )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(trimEdge.opacity(0.4), lineWidth: 1)
-                )
-                .shadow(color: trimEdge.opacity(0.4), radius: 0, x: 0, y: 4)
-                .shadow(color: .black.opacity(0.10), radius: 8, x: 0, y: 6)
                 .padding(.horizontal, 6)
         }
     }

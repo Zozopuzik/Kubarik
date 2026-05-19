@@ -7,7 +7,7 @@ title: Terms of Use
 
 <span class="updated">Last updated · May 2026</span>
 
-By tapping **Play**, signing in, or otherwise using **Kubariki** ("the App"), you agree to these terms.
+By tapping **Play**, signing in, or otherwise using **Cubariki** ("the App"), you agree to these terms.
 
 ## 1. The deal
 
