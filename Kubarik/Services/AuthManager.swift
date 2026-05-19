@@ -23,10 +23,20 @@ final class AuthManager {
     /// signed out.
     private(set) var totalScore: Int = 0
     private let backend: AuthBackend
+    private let queue: GameRecordQueue
 
-    init(backend: AuthBackend = SupabaseAuthBackend()) {
-        self.backend = backend
+    init(backend: AuthBackend? = nil, queue: GameRecordQueue? = nil) {
+        // Default parameters can't construct @MainActor types directly —
+        // they're evaluated at the call site, which may not be isolated.
+        // Build the real instances inside the init body (which IS on the
+        // main actor) and fall back to those when callers don't inject.
+        self.backend = backend ?? SupabaseAuthBackend()
+        self.queue = queue ?? GameRecordQueue()
     }
+
+    /// How many game sessions are currently waiting for a sync to
+    /// Supabase. Surfaced in the UI as a "X games pending" hint.
+    var pendingRecordCount: Int { queue.pending.count }
 
     /// Called from the app entry point. Restores any persisted session
     /// and either lands us in `.signedIn` or `.guest`.
@@ -37,6 +47,7 @@ final class AuthManager {
                 return
             }
             try await loadProfile(for: session.userId, suggestedName: session.suggestedName)
+            await flushPendingRecords()
         } catch {
             state = .guest
         }
@@ -52,18 +63,21 @@ final class AuthManager {
             suggestedName: suggestedName
         )
         try await loadProfile(for: session.userId, suggestedName: session.suggestedName ?? suggestedName)
+        await flushPendingRecords()
     }
 
     /// Creates a new account. Requires Supabase "Confirm email" to be OFF.
     func signUp(email: String, password: String) async throws {
         let result = try await backend.signUp(email: email, password: password)
         try await loadProfile(for: result.userId, suggestedName: result.suggestedName)
+        await flushPendingRecords()
     }
 
     /// Signs in an existing user with email + password.
     func signIn(email: String, password: String) async throws {
         let result = try await backend.signIn(email: email, password: password)
         try await loadProfile(for: result.userId, suggestedName: result.suggestedName)
+        await flushPendingRecords()
     }
 
     /// Asks Supabase to email a magic link (kept for future use).
@@ -91,36 +105,83 @@ final class AuthManager {
     /// and refreshes the lifetime total. Idempotent — safe to call after
     /// every game-over.
     func recordGameOver(score: Int, linesCleared: Int) async {
+        let pending = PendingGameRecord(
+            id: UUID(),
+            score: score,
+            linesCleared: linesCleared,
+            playedAt: Date()
+        )
+
         guard case .signedIn(let profile) = state else {
-            // Guest mode — keep a running local total for the Profile
-            // screen even if the user hasn't signed in yet.
+            // Guest mode — queue the record for a future sign-in flush
+            // and keep the running local total in sync.
+            queue.enqueue(pending)
             totalScore += score
             return
         }
+
         do {
             try await backend.logGame(userId: profile.id, score: score, linesCleared: linesCleared)
 
-            if score > profile.bestScore {
-                let updated = try await backend.updateProfile(
-                    userId: profile.id,
-                    displayName: nil,
-                    bestScore: score,
-                    totalGames: profile.totalGames + 1
-                )
-                state = .signedIn(profile: updated)
-            } else {
-                let updated = try await backend.updateProfile(
-                    userId: profile.id,
-                    displayName: nil,
-                    bestScore: nil,
-                    totalGames: profile.totalGames + 1
-                )
-                state = .signedIn(profile: updated)
-            }
+            let updated = try await backend.updateProfile(
+                userId: profile.id,
+                displayName: nil,
+                bestScore: score > profile.bestScore ? score : nil,
+                totalGames: profile.totalGames + 1
+            )
+            state = .signedIn(profile: updated)
             totalScore = (try? await backend.totalScore(userId: profile.id)) ?? totalScore
         } catch {
-            // best-effort; keep local state
+            // Network blip mid game-over — park the record so the next
+            // flush picks it up. Local totalScore still climbs so the UI
+            // doesn't lie about the just-finished game.
+            queue.enqueue(pending)
+            totalScore += score
         }
+    }
+
+    /// Drains the pending-game queue into Supabase. Called after
+    /// successful sign-in and on bootstrap when a session is restored.
+    /// Silently bails on the first network failure so the next attempt
+    /// retries the remainder.
+    func flushPendingRecords() async {
+        guard case .signedIn(let profile) = state, !queue.pending.isEmpty else { return }
+
+        var maxScoreInBatch = 0
+        var flushedCount = 0
+
+        for record in queue.pending {
+            do {
+                try await backend.logGame(
+                    userId: profile.id,
+                    score: record.score,
+                    linesCleared: record.linesCleared
+                )
+                queue.remove(id: record.id)
+                maxScoreInBatch = max(maxScoreInBatch, record.score)
+                flushedCount += 1
+            } catch {
+                return
+            }
+        }
+
+        guard flushedCount > 0 else { return }
+
+        let newBestNeeded = maxScoreInBatch > profile.bestScore
+        do {
+            let updated = try await backend.updateProfile(
+                userId: profile.id,
+                displayName: nil,
+                bestScore: newBestNeeded ? maxScoreInBatch : nil,
+                totalGames: profile.totalGames + flushedCount
+            )
+            state = .signedIn(profile: updated)
+        } catch {
+            // Stats refresh failed — records are already persisted in
+            // games table, that's the source of truth. Next launch will
+            // recompute via totalScore RPC.
+        }
+        totalScore = (try? await backend.totalScore(userId: profile.id)) ?? totalScore
     }
 
     /// Refreshes the lifetime total — used by the Profile screen on
@@ -166,6 +227,9 @@ final class AuthManager {
         try await backend.deleteAccount(userId: profile.id)
         state = .guest
         totalScore = 0
+        // Drop any unsynced records so they don't leak into the next
+        // sign-in (which will likely be a different account anyway).
+        queue.clear()
     }
 
     // MARK: - Internals
