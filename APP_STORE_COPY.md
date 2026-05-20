@@ -169,12 +169,19 @@ Last Name: Sabadash
 Phone: +380 96 832 3305
 Email: evgen.sabadash1337@gmail.com
 
-Notes for Reviewer:
-- Sign-in is OPTIONAL. The full game is playable as a guest — just tap PLAY on the welcome screen.
-- The only sign-in method is Sign in with Apple (native, via AuthenticationServices). No demo account needed — please use any Apple ID to test signed-in features (Profile, Leaderboard, score sync).
-- Account deletion: Profile → Info tab → DELETE ACCOUNT button. Wipes auth.users + profile + every game row in one transaction via a SECURITY DEFINER Postgres function. Required by App Store Review guideline 5.1.1(v).
-- No IAP, no subscriptions, no ads, no third-party analytics or tracking SDKs.
-- Source code public at github.com/Zozopuzik/Kubarik
+KEY POINTS FOR REVIEW
+
+• Sign-in is OPTIONAL. The full game is playable as a guest — tap PLAY on the welcome screen.
+
+• The only sign-in method is Sign in with Apple (native, via AuthenticationServices). No demo account needed — please use any Apple ID to test signed-in features (Profile, Leaderboard, score sync).
+
+• Guideline 5.1.1 (account deletion) — path: Welcome → Sign in with Apple → tap "person" icon → Profile → Info tab → DELETE ACCOUNT button (red, under Sign Out). One tap, single confirmation, wipes auth.users + profile + every game row in one transaction via a SECURITY DEFINER Postgres function.
+
+• Guideline 4.3 (originality) — Cubariki is a one-person creative work with unique mechanics: magnetic snap (Manhattan radius search), 39 weighted piece shapes (vs the genre standard ~20), escalating praise callouts (NICE → COMBO → WOW → MEGA → ON FIRE), chained 3-level haptics, and custom soundtrack crossfade. Open source — github.com/Zozopuzik/Kubarik
+
+• No IAP, no subscriptions, no ads, no third-party analytics or tracking SDKs.
+
+• Privacy policy: https://zozopuzik.github.io/Kubarik/privacy/
 ```
 
 ---
