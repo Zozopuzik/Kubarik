@@ -12,7 +12,7 @@
 import Foundation
 
 struct Board: Equatable {
-    static let size = 7
+    static let size = 8
 
     private(set) var cells: [[TileColor?]]
 

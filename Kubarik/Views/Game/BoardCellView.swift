@@ -28,12 +28,23 @@ struct BoardCellView: View {
     @State private var settleOpacity: Double = 1.0
     @State private var glow: Double = 0
 
+    /// What we actually draw. Lags `color` during clear animations so the
+    /// tile gets to fade + shrink before vanishing.
+    @State private var displayColor: TileColor? = nil
+    @State private var clearScale: CGFloat = 1.0
+    @State private var clearOpacity: Double = 1.0
+
     var body: some View {
-        Group {
-            if let color {
-                TileView(color: color, size: size, cast: false)
-                    .scaleEffect(settleScale * (willClear ? (1.0 + 0.10 * glow) : 1.0))
-                    .opacity(settleOpacity)
+        ZStack {
+            // Empty slot is always drawn underneath so the cell never goes
+            // momentarily blank during a clear animation.
+            emptySlot
+                .overlay(ghostFill)
+
+            if let displayColor {
+                TileView(color: displayColor, size: size, cast: false)
+                    .scaleEffect(settleScale * clearScale * (willClear ? (1.0 + 0.10 * glow) : 1.0))
+                    .opacity(settleOpacity * clearOpacity)
                     .saturation(willClear ? 1.0 + 0.6 * glow : 1.0)
                     .brightness(willClear ? 0.28 * glow : 0)
                     .shadow(
@@ -42,9 +53,6 @@ struct BoardCellView: View {
                         x: 0,
                         y: 0
                     )
-            } else {
-                emptySlot
-                    .overlay(ghostFill)
             }
         }
         .onAppear { configureInitialState() }
@@ -57,6 +65,9 @@ struct BoardCellView: View {
             } else {
                 stopGlow()
             }
+        }
+        .onChange(of: color) { old, new in
+            handleColorChange(old: old, new: new)
         }
     }
 
@@ -115,12 +126,34 @@ struct BoardCellView: View {
     }
 
     private func configureInitialState() {
+        displayColor = color
         if isJustPlaced {
             settleScale = 0.92
             settleOpacity = 0.6
             playSettlePop()
         }
         if willClear { startGlow() }
+    }
+
+    /// Reacts to the board mutating this cell. A nil→color transition is
+    /// just a placement (settle-pop handles the entrance separately). A
+    /// color→nil transition is a clear, and we animate the tile out instead
+    /// of letting it pop out of existence on the next frame.
+    private func handleColorChange(old: TileColor?, new: TileColor?) {
+        if old != nil && new == nil {
+            withAnimation(.easeOut(duration: 0.34)) {
+                clearScale = 0.2
+                clearOpacity = 0
+            }
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(360))
+                displayColor = nil
+                clearScale = 1.0
+                clearOpacity = 1.0
+            }
+        } else {
+            displayColor = new
+        }
     }
 
     private func playSettlePop() {

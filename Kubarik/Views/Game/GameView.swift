@@ -26,9 +26,14 @@ struct GameView: View {
     @State private var haptics = HapticEngine()
     @Environment(PreferencesStore.self) private var prefs
     @State private var praise: PraiseInstance? = nil
-    @State private var floats: [FloatScoreInstance] = []
     @State private var particles: [Particle] = []
     @State private var justPlacedCells: Set<GridPosition> = []
+
+    /// "+N" delta that drifts up from under the SCORE block after each clear.
+    @State private var headerScoreDelta: Int? = nil
+    @State private var headerDeltaOpacity: Double = 0
+    @State private var headerDeltaOffsetY: CGFloat = 0
+    @State private var headerDeltaColor: TileColor = .coral
 
     // Cached will-clear prediction — recomputed only when the hovered
     // origin changes, not on every body redraw.
@@ -195,6 +200,18 @@ struct GameView: View {
                 .contentTransition(.numericText(value: Double(value)))
                 .scaleEffect(accent ? scoreBounceScale : 1.0)
                 .animation(.spring(response: 0.18, dampingFraction: 0.55), value: value)
+                .overlay(alignment: .bottom) {
+                    if accent, let delta = headerScoreDelta {
+                        Text("+\(delta)")
+                            .font(.system(size: 17, weight: .heavy, design: .rounded))
+                            .foregroundStyle(Palette.textBrown)
+                            .shadow(color: headerDeltaColor.edge.opacity(0.45), radius: 0, x: 0, y: 1)
+                            .monospacedDigit()
+                            .opacity(headerDeltaOpacity)
+                            .offset(y: headerDeltaOffsetY)
+                            .allowsHitTesting(false)
+                    }
+                }
         }
     }
 
@@ -207,10 +224,6 @@ struct GameView: View {
         ZStack {
             ForEach(particles) { particle in
                 ParticleView(particle: particle)
-            }
-
-            ForEach(floats) { float in
-                FloatScoreView(instance: float)
             }
 
             if let praise {
@@ -260,17 +273,8 @@ struct GameView: View {
             particles.removeAll { particleIds.contains($0.id) }
         }
 
-        // 2. Spawn floating +N at board center
-        let floatInstance = FloatScoreInstance(
-            origin: CGPoint(x: boardFrame.midX, y: boardFrame.midY),
-            delta: event.scoreDelta,
-            color: event.dominantColor
-        )
-        floats.append(floatInstance)
-        Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(1200))
-            floats.removeAll { $0.id == floatInstance.id }
-        }
+        // 2. "+N" floats up from under the SCORE block in the header
+        triggerHeaderDelta(event.scoreDelta, color: event.dominantColor)
 
         // 3. Praise callout
         let tier = PraiseTier.evaluate(lineCount: event.lineCount, comboChain: event.combo)
@@ -284,6 +288,28 @@ struct GameView: View {
         // 4. Screen shake — bigger as it escalates
         let intensity = min(event.lineCount + (event.combo >= 2 ? 1 : 0), 4)
         shake.trigger(intensity: intensity)
+    }
+
+    /// Pops a "+N" right under the SCORE value and drifts it up while
+    /// fading. Self-cancels — calling it again mid-flight resets to a
+    /// fresh entrance so consecutive combos stay readable.
+    private func triggerHeaderDelta(_ delta: Int, color: TileColor) {
+        headerScoreDelta = delta
+        headerDeltaColor = color
+        headerDeltaOffsetY = 44
+        headerDeltaOpacity = 0
+        withAnimation(.spring(response: 0.24, dampingFraction: 0.72)) {
+            headerDeltaOffsetY = 52
+            headerDeltaOpacity = 1
+        }
+        withAnimation(.easeIn(duration: 0.95).delay(1.05)) {
+            headerDeltaOffsetY = 22
+            headerDeltaOpacity = 0
+        }
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(2100))
+            headerScoreDelta = nil
+        }
     }
 
     private func cellCenterInGameSpace(_ pos: GridPosition) -> CGPoint {
