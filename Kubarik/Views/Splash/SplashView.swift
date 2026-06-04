@@ -17,10 +17,14 @@ struct SplashView: View {
     @State private var wordmarkIn = false
     @State private var taglineIn = false
 
-    private let cubes: [(color: TileColor, letter: String, offsetX: CGFloat, top: CGFloat, rotation: Double)] = [
-        (.amber, "C",  18, 230, -6),
-        (.coral, "U", -16, 330,  4),
-        (.mint,  "B",   8, 430, -2),
+    // Each cube's vertical anchor is expressed as a FRACTION of the screen
+    // height instead of a hard-coded pixel value so the brand reveal lands
+    // correctly on every device (iPhone, iPhone Pro Max, iPad compat-mode
+    // window, anything in between).
+    private let cubes: [(color: TileColor, letter: String, offsetX: CGFloat, topFraction: CGFloat, rotation: Double)] = [
+        (.amber, "C",  18, 0.27, -6),
+        (.coral, "U", -16, 0.39,  4),
+        (.mint,  "B",   8, 0.51, -2),
     ]
 
     private let cubeSize: CGFloat = 124
@@ -34,11 +38,12 @@ struct SplashView: View {
 
             GeometryReader { proxy in
                 let cx = proxy.size.width / 2
+                let h = proxy.size.height
 
                 ZStack {
                     ForEach(Array(cubes.enumerated()), id: \.offset) { index, cube in
                         cubeView(cube)
-                            .position(x: cx + cube.offsetX, y: cube.top + cubeSize / 2)
+                            .position(x: cx + cube.offsetX, y: h * cube.topFraction + cubeSize / 2)
                             .opacity(cubesIn[index] ? 1 : 0)
                             .offset(y: cubesIn[index] ? 0 : -580)
                     }
@@ -47,12 +52,12 @@ struct SplashView: View {
                         .font(.system(size: 32, weight: .heavy, design: .rounded))
                         .tracking(6)
                         .foregroundStyle(Palette.textBrown)
-                        .position(x: cx, y: 600)
+                        .position(x: cx, y: h * 0.74)
                         .opacity(wordmarkIn ? 1 : 0)
                         .offset(y: wordmarkIn ? 0 : 10)
 
                     SDSMark()
-                        .position(x: cx, y: proxy.size.height - 84)
+                        .position(x: cx, y: h - 84)
                         .opacity(taglineIn ? 1 : 0)
                         .offset(y: taglineIn ? 0 : 10)
                 }
