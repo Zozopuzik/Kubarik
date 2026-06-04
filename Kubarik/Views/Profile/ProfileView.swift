@@ -27,11 +27,11 @@ struct ProfileView: View {
 
             VStack(spacing: 0) {
                 header
-                Spacer().frame(height: 12)
+                Spacer().frame(height: 8)
                 tabSwitcher
                     .padding(.horizontal, 16)
 
-                Spacer().frame(height: 22)
+                Spacer().frame(height: 14)
 
                 Group {
                     switch tab {
@@ -152,21 +152,21 @@ struct ProfileView: View {
     private var infoTab: some View {
         let profile = auth.state.profile
 
-        return VStack(spacing: 18) {
+        return VStack(spacing: 12) {
             avatarCube(for: profile)
 
-            VStack(spacing: 4) {
+            VStack(spacing: 2) {
                 HStack(spacing: 8) {
                     Text(profile?.displayName ?? "Player")
-                        .font(.system(size: 24, weight: .heavy, design: .rounded))
+                        .font(.system(size: 21, weight: .heavy, design: .rounded))
                         .foregroundStyle(Palette.textBrown)
 
                     if profile != nil {
                         Button(action: { showRenameSheet = true }) {
                             Image(systemName: "pencil")
-                                .font(.system(size: 14, weight: .heavy))
+                                .font(.system(size: 12, weight: .heavy))
                                 .foregroundStyle(Palette.textBrown.opacity(0.7))
-                                .frame(width: 28, height: 28)
+                                .frame(width: 24, height: 24)
                                 .background(
                                     Circle()
                                         .fill(Color.white.opacity(0.55))
@@ -182,8 +182,8 @@ struct ProfileView: View {
 
                 if let createdAt = profile?.createdAt {
                     Text("JOINED · \(createdAt.formatted(.dateTime.month(.abbreviated).year()).uppercased())")
-                        .font(.system(size: 11, weight: .heavy, design: .rounded))
-                        .tracking(1.6)
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .tracking(1.4)
                         .foregroundStyle(Palette.taglineBrown)
                 }
             }
@@ -194,12 +194,10 @@ struct ProfileView: View {
                 total: auth.totalScore
             )
             .padding(.horizontal, 16)
-            .padding(.top, 4)
-
-            Spacer()
+            .padding(.top, 2)
 
             if profile != nil {
-                VStack(spacing: 6) {
+                VStack(spacing: 4) {
                     Button(action: {
                         Task {
                             await auth.signOut()
@@ -207,11 +205,11 @@ struct ProfileView: View {
                         }
                     }) {
                         Text("SIGN OUT")
-                            .font(.system(size: 13, weight: .heavy, design: .rounded))
-                            .tracking(2.4)
+                            .font(.system(size: 12, weight: .heavy, design: .rounded))
+                            .tracking(2.2)
                             .foregroundStyle(Palette.textBrown.opacity(0.65))
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 28)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 24)
                     }
 
                     Button(action: { showDeleteConfirm = true }) {
@@ -219,19 +217,20 @@ struct ProfileView: View {
                             if isDeleting {
                                 ProgressView()
                                     .progressViewStyle(.circular)
-                                    .scaleEffect(0.75)
+                                    .scaleEffect(0.7)
                             }
                             Text(isDeleting ? "DELETING…" : "DELETE ACCOUNT")
-                                .font(.system(size: 12, weight: .heavy, design: .rounded))
-                                .tracking(2.2)
+                                .font(.system(size: 11, weight: .heavy, design: .rounded))
+                                .tracking(2.0)
                                 .foregroundStyle(Color(hex: 0xB23A2E).opacity(0.85))
                         }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 24)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 22)
                     }
                     .disabled(isDeleting)
                 }
-                .padding(.bottom, 18)
+                .padding(.top, 10)
+                .padding(.bottom, 10)
             }
         }
     }
@@ -240,13 +239,13 @@ struct ProfileView: View {
         let letter = profile?.displayName.prefix(1).uppercased() ?? "K"
         return TileView(
             color: .coral,
-            size: 110,
-            radius: 32,
-            depth: 14,
+            size: 88,
+            radius: 26,
+            depth: 11,
             rotation: -4
         ) {
             Text(letter)
-                .font(.system(size: 70, weight: .heavy, design: .rounded))
+                .font(.system(size: 56, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
                 .shadow(color: TileColor.coral.edge, radius: 0, x: 0, y: 2)
                 .shadow(color: TileColor.coral.edge, radius: 0, x: 0, y: 4)
