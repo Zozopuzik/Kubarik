@@ -77,7 +77,7 @@ struct SplashView: View {
         )
     }
 
-    private func cubeView(_ cube: (color: TileColor, letter: String, offsetX: CGFloat, top: CGFloat, rotation: Double)) -> some View {
+    private func cubeView(_ cube: (color: TileColor, letter: String, offsetX: CGFloat, topFraction: CGFloat, rotation: Double)) -> some View {
         TileView(
             color: cube.color,
             size: cubeSize,
